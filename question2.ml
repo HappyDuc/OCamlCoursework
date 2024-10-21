@@ -9,7 +9,7 @@ type suit = HEARTS | CLUBS | DIAMONDS | SPADES
 (* Any number card is of the primitive type int and the face cards can be either
 a jack, queen or king. I have chosen to not implement the joker card commonly 
 found in real packs as they are not typically used. *)
-type card = ACE | NUMBER of int | JACK | QUEEN | KING
+type card = ACE | NUMBER of int | TEN | JACK | QUEEN | KING
 
 (* validSuit : suit -> bool *)
 let validSuit value =
