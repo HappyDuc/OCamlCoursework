@@ -3,14 +3,15 @@
 (* a (3 marks) *)
 
 (* Provide definitions below! Remember to include comments to justify your solutions. *)
-type suit = Hearts | Clubs | Diamonds | Spades | Other
 
-type cardValue = Number of int | Ten | Jack | Queen | King | Ace | Other
+(* Type of the suits that a card can be *)
+type suit = Hearts | Clubs | Diamonds | Spades | OtherSuit
 
-(* Any number card is of the primitive type int and the face cards can be either
-a jack, queen or king. I have chosen to not implement the joker card commonly 
-found in real packs as they are not typically used. *)
-type card = (suit * cardValue)
+(* Helper type of values that a card can be *)
+type cardValue = Number of int | Ten | Jack | Queen | King | Ace | OtherCardValue
+
+(* A pair of the suit and the cardValue. *)
+type card = Card of (suit * cardValue)
 
 (* validSuit : suit -> bool *)
 let validSuit suit =
@@ -19,8 +20,9 @@ let validSuit suit =
   | Clubs -> true
   | Diamonds -> true
   | Spades -> true
-  | Other -> false
+  | OtherSuit -> false
 
+(* validCardValue : cardValue -> bool *)
 let validCardValue cardValue =
   match cardValue with
   | Number n -> 1 < n && n < 10
@@ -29,12 +31,14 @@ let validCardValue cardValue =
   | Queen -> true
   | King -> true
   | Ace -> true
-  | Other -> false
+  | OtherCardValue -> false
 
 (* validCard : card -> bool *)
 
 let validCard card =
   match card with
+  | (_, OtherCardValue) -> false
+  | (OtherSuit, _) -> false
   | (suit, cardValue) -> validSuit suit && validCardValue cardValue
 
 (* b (3 marks) *)
@@ -42,21 +46,46 @@ let validCard card =
 (* parseSuit : string -> suit *)
 exception Invalid_argument
 let parseSuit string =
-  if String.length string = 1 then
-    match string with
-    | "HEARTS" -> HEARTS
-    | "CLUBS" -> CLUBS
-    | "DIAMONDS" -> DIAMONDS
-    | "SPADES" -> SPADES
-    | _ -> raise Invalid_argument
-  else
-    
+  match string with
+  | "H" -> Hearts
+  | "C" -> Clubs
+  | "D" -> Diamonds
+  | "S" -> Spades
+  | _ -> raise Invalid_argument
+
+(* parseCardValue : string -> cardValue*)
+(* Function to parse the cardValue from a string.*)
+let parseCardValue string =
+  match string with
+  | "N" -> Number 1
+  | "T" -> Ten
+  | "J" -> Jack
+  | "Q" -> Queen
+  | "K" -> King
+  | "A" -> Ace
+  | _ -> OtherCardValue
 
 (* parseCard : string -> card *)
-let parseCard = failwith "Not implemented"
+let parseCard cardInput = 
+  let newSuit = parseSuit (String.sub cardInput 0 1) in
+  let newCardValue = parseCardValue (String.sub cardInput 1 1) in
+  if validCard (newSuit, newCardValue) then
+    Card (newSuit, newCardValue)
+  else
+    raise Invalid_argument
 
 (* c (4 marks) *)
 
 (* winner : suit option -> card list -> int *)
-let winner = failwith "Not implemented"
+let winner trumpSuit cards = 
+  if trumpSuit = None then
+    let trumpCard = match cards with
+    | x :: xs -> parseCard(x)
+    | [] -> failwith "Card List is empty"
+    in let trumpSuit = match trumpCard with
+      | Card (suit, _) -> suit
+      in ()
+  else
+    ()
+
 
