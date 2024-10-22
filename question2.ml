@@ -3,9 +3,9 @@
 (* a (3 marks) *)
 
 (* Provide definitions below! Remember to include comments to justify your solutions. *)
-type suit = Hearts | Clubs | Diamonds | Spades
+type suit = Hearts | Clubs | Diamonds | Spades | Other
 
-type cardValue = Number of int | Ten | Jack | Queen | King | Ace
+type cardValue = Number of int | Ten | Jack | Queen | King | Ace | Other
 
 (* Any number card is of the primitive type int and the face cards can be either
 a jack, queen or king. I have chosen to not implement the joker card commonly 
@@ -19,6 +19,7 @@ let validSuit suit =
   | Clubs -> true
   | Diamonds -> true
   | Spades -> true
+  | Other -> false
 
 let validCardValue cardValue =
   match cardValue with
@@ -28,6 +29,7 @@ let validCardValue cardValue =
   | Queen -> true
   | King -> true
   | Ace -> true
+  | Other -> false
 
 (* validCard : card -> bool *)
 
